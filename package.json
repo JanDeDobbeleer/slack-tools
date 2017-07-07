@@ -1,0 +1,18 @@
+{
+    "name": "uwa",
+    "version": "1.0.0",
+    "description": "This the Slack slash command for UWA",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node app.js"
+    },
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "body-parser": "^1.17.2",
+        "express": "^4.15.3",
+        "python-shell": "^0.4.0",
+        "slack-node": "^0.1.8"
+    }
+}

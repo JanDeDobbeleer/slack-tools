@@ -1,0 +1,6 @@
+gunicorn
+lxml
+mollie-api-python
+requests
+Faker
+beautifulsoup4

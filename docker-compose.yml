@@ -1,0 +1,13 @@
+version: '3'
+services:
+  api:
+    image: slack-api
+    build: .
+    env_file:
+    - .env
+    ports:
+     - "3001:3000"
+    volumes:
+     - ./:/api/
+     - /api/node_modules
+    entrypoint: ['yarn', 'start']
