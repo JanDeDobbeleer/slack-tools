@@ -50,7 +50,7 @@ function handleCommand(response, request) {
             response.status(200).end(`Fuck you ${request.body.user_name}, make your own goddamn sandwich.`);
             break;
         case 'sudo make me a sandwich':
-            response.status(200).end(`Sure thing ${request.body.user_name}! 🥪`);
+            response.status(200).end(`Sure thing ${request.body.user_name}! :hamburger:`);
             break;
         default:
             let options = ['stievie free', 'stievie premium', 'stievie premium mandate'];
