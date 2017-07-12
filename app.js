@@ -46,6 +46,9 @@ function handleCommand(response, request) {
             response.status(200).end(`Hey ${request.body.user_name}, please hold while I create you a new Stievie Premium user with a mandate!`);
             runPythonCommand(request, 'commands/stievie_premium_mandate.py');
             break;
+        case 'make me a sandwich':
+            response.status(200).end(`Fuck you ${request.body.user_name}, make your own goddamn sandwich.`);
+            break;
         default:
             let options = ['stievie free', 'stievie premium', 'stievie premium mandate'];
             response.status(200).end(`I'm sorry ${request.body.user_name}, I didn't quite get that. Please try again. The options are:\n ${options.join('\n')}`);
