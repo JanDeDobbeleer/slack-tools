@@ -13,6 +13,9 @@ var spinning = false;
 // settings
 app.use(bodyParser.json()); // for parsing application/json
 var port = process.env.PORT || 3000;
+var options = {
+    pythonPath: '/usr/bin/python3'
+};
 
 // respond with "hello world" when a GET request is made to the homepage
 app.get('/', function(req, res) {
@@ -52,7 +55,7 @@ function handleCommand(response, request) {
 function runPythonCommand(req, script) {
     slack = new Slack();
     slack.setWebhook(req.body.response_url);
-    PythonShell.run(script, function(err, results) {
+    PythonShell.run(script, options, function(err, results) {
         // script finished
         var text = 'Something went wrong, please try again';
         if (!err) {
