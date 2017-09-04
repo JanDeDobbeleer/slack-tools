@@ -33,7 +33,14 @@ app.post('/slash-command', urlencodedParser, function(req, res) {
 });
 
 function handleCommand(response, request) {
-    switch (request.body.text) {
+    // searching
+    let text = request.body.text
+    if (text.startsWith('stievie gigya find')) {
+        let query = text.replace('stievie gigya find ', '');
+        runPythonCommand(request, 'commands/search_user.py', [query]);
+    }
+    // basic commands
+    switch (text) {
         case 'stievie free':
             response.status(200).end(`Hey ${request.body.user_name}, please hold while I create you a new Stievie Free user!`);
             runPythonCommand(request, 'commands/stievie_free.py');
@@ -53,20 +60,24 @@ function handleCommand(response, request) {
             response.status(200).end(`Sure thing ${request.body.user_name}! :hamburger:`);
             break;
         default:
-            let options = ['stievie free', 'stievie premium', 'stievie premium mandate'];
+            let options = ['stievie free', 'stievie premium', 'stievie premium mandate', 'stievie gigya find'];
             response.status(200).end(`I'm sorry ${request.body.user_name}, I didn't quite get that. Please try again. The options are:\n ${options.join('\n')}`);
     }
 }
 
-function runPythonCommand(req, script) {
+function runPythonCommand(req, script, args) {
     slack = new Slack();
     slack.setWebhook(req.body.response_url);
+    if (args) {
+        options.args = args;
+    }
     PythonShell.run(script, options, function(err, results) {
         // script finished
         var text = 'Something went wrong, please try again';
         if (!err) {
             text = results.join('\n');
         }
+        console.log(text);
         slack.webhook({
             channel: req.body.channel_id,
             text: text

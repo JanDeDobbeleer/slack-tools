@@ -1,4 +1,4 @@
-from bss.sbss_stievie import create_gigya_user
+from bss.stievie import create_gigya_user
 from bss.helper import Helper
 
 try:

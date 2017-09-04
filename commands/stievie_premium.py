@@ -1,6 +1,6 @@
-from bss.sbss_stievie import create_premium_user
-from bss.sbss_stievie import get_subscription
-from bss.sbss_stievie import create_mandate
+from bss.stievie import create_premium_user
+from bss.stievie import get_subscription
+from bss.stievie import create_mandate
 from bss.helper import Helper
 
 try:

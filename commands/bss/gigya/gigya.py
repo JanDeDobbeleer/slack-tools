@@ -6,8 +6,8 @@ from .GSSDK import GSRequest
 class GigyaClient(object):
     """Concrete implementation of the client that communicates with the Gigya REST API"""
 
-    def __init__(self):
-        self.api_key = os.environ.get('G_AKEY')
+    def __init__(self, api_key = None):
+        self.api_key = os.environ.get('G_AKEY') if api_key is None else api_key
         self.user_key = os.environ.get('G_UKEY')
         self.secret_key = os.environ.get('G_SKEY')
         self.domain = "eu1.gigya.com"
@@ -149,7 +149,7 @@ class GigyaClient(object):
         }
 
         self._call_gigya(GigyaApiEndpoint.ACCOUNTS_SET_ACCOUNT_INFO, {'uid': uid, 'profile': profile_data,
-                                                                      'data': extra_data})
+                                                                      'data': extra_data, 'isVerified': True})
 
     # currently not used but keeping it around because it might chance again.
     def login(self, login_id, password):
@@ -173,7 +173,7 @@ class GigyaClient(object):
         response = self._call_gigya(method, params)
         return response
 
-    def get_uid_from_email(self, email):
+    def get_profile_from_email(self, email):
         """
         Get a UID for an email address
         """
@@ -183,4 +183,68 @@ class GigyaClient(object):
         }
         method = 'accounts.search'
         response = self._call_gigya(method, params)
-        return response['results'][0]
+        return response
+
+    def get_available_channels(self, enabled):
+        return {
+            '_2be': enabled,
+            'bbcfirst': enabled,
+            'canvas': enabled,
+            'caz': enabled,
+            'ccflan': enabled,
+            'discovl': enabled,
+            'een': enabled,
+            'eursbe': enabled,
+            'kadet': enabled,
+            'ketnet': enabled,
+            'kzoom': enabled,
+            'mtvvl': enabled,
+            'ngc': enabled,
+            'ngcwild': enabled,
+            'npo1': enabled,
+            'npo2': enabled,
+            'npo3': enabled,
+            'qmusic': enabled,
+            'tlcvl': enabled,
+            'vier': enabled,
+            'vijf': enabled,
+            'vitaya': enabled,
+            'vtm': enabled,
+            'zes': enabled
+        }
+
+    def update_view_permissions(self, uid, is_premium_subscription):
+        """
+        Updates the view permissions (permission string) for a specific account.
+        Uses http://developers.gigya.com/display/GD/accounts.setAccountInfo+REST
+        :param uid: the user id in gigya
+        :param is_premium_subscription: indicates if it's a premium subscription or not
+        """
+        data = {
+            'authorization': {
+                'Stievie_free': {
+                    'subscription': {
+                        'id': 'premium' if is_premium_subscription else 'free'
+                    },
+                    'streams': {
+                        'concurrency': 1
+                    },
+                    'npvr': {
+                        'enabled': True if is_premium_subscription else False,
+                        'max': 200 if is_premium_subscription else 0,
+                        'expires': 14400 if is_premium_subscription else 0,
+                    },
+                    'pvr': {
+                        'enabled': True if is_premium_subscription else False
+                    },
+                }
+            }
+        }
+
+        channels = self.get_available_channels(is_premium_subscription)
+        channels_dict = {}
+        for channel_code, channel_enabled in channels.items():
+            channels_dict[channel_code] = {'enabled': channel_enabled}
+        data['authorization']['Stievie_free'].update({'channels': channels_dict})
+
+        self._call_gigya(GigyaApiEndpoint.ACCOUNTS_SET_ACCOUNT_INFO, {'uid': uid, 'data': data})

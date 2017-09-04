@@ -63,3 +63,7 @@ def get_subscription(customercode):
     return {
         'id': codes[0].string
     }
+
+def get_gigya_profile(email):
+    profile = GigyaClient().get_profile_from_email(email)
+    return profile
