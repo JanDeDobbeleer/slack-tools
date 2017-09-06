@@ -1,0 +1,25 @@
+---
+- name: Deploy to Digital Ocean
+  hosts: do
+  remote_user: jan
+  tasks:
+  - name: stop docker container
+    command: docker-compose stop
+    args:
+        chdir: /home/{{ ansible_ssh_user }}/slack-tools
+  - git:
+      repo: git@github.com:JanJoris/slack-tools.git
+      dest: /home/{{ ansible_ssh_user }}/slack-tools
+      key_file: ~/.ssh/id_rsa
+      clone: no
+      update: yes
+  - name: copy config file
+    copy: src=/home/jan/Git/python-tools/.env dest=/home/{{ ansible_ssh_user }}/slack-tools/.env
+  - name: restart vpn
+    shell: openvpn --client --config /home/{{ ansible_ssh_user }}/client.ovpn --auth-user-pass /home/{{ ansible_ssh_user }}/client.config --daemon --resolv-retry infinite 2>/dev/null
+    become: true
+  - name: start docker container
+    command: docker-compose up -d
+    args:
+        chdir: /home/{{ ansible_ssh_user }}/slack-tools
+  
