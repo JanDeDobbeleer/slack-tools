@@ -10,4 +10,4 @@ services:
     volumes:
      - ./:/api/
      - /api/node_modules
-    entrypoint: ['yarn', 'start']
+    command: ['yarn', 'start']
