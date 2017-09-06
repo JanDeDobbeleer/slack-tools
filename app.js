@@ -37,7 +37,7 @@ function handleCommand(response, request) {
     let text = request.body.text
     if (text.startsWith('gs')) {
         let query = text.replace('gs ', '');
-        runPythonCommand(request, 'commands/search_user.py', [query]);
+        runPythonCommand(request, 'commands/get_profile_by_id.py', [query]);
     }
     // basic commands
     switch (text) {
