@@ -35,21 +35,21 @@ app.post('/slash-command', urlencodedParser, function(req, res) {
 function handleCommand(response, request) {
     // searching
     let text = request.body.text
-    if (text.startsWith('stievie gigya find')) {
-        let query = text.replace('stievie gigya find ', '');
+    if (text.startsWith('gs')) {
+        let query = text.replace('gs ', '');
         runPythonCommand(request, 'commands/search_user.py', [query]);
     }
     // basic commands
     switch (text) {
-        case 'stievie free':
+        case 'sf':
             response.status(200).end(`Hey ${request.body.user_name}, please hold while I create you a new Stievie Free user!`);
             runPythonCommand(request, 'commands/stievie_free.py');
             break;
-        case 'stievie premium':
+        case 'sp':
             response.status(200).end(`Hey ${request.body.user_name}, please hold while I create you a new Stievie Premium user!`);
             runPythonCommand(request, 'commands/stievie_premium.py');
             break;
-        case 'stievie premium mandate':
+        case 'spm':
             response.status(200).end(`Hey ${request.body.user_name}, please hold while I create you a new Stievie Premium user with a mandate!`);
             runPythonCommand(request, 'commands/stievie_premium_mandate.py');
             break;
@@ -60,7 +60,7 @@ function handleCommand(response, request) {
             response.status(200).end(`Sure thing ${request.body.user_name}! :hamburger:`);
             break;
         default:
-            let options = ['stievie free', 'stievie premium', 'stievie premium mandate', 'stievie gigya find'];
+            let options = ['sf: create stievie free user', 'sp: create stievie premium user', 'spm: create stievie premium user with mandate', 'gs <Gigya ID>: show Gigya info for given <Gigya ID>'];
             response.status(200).end(`I'm sorry ${request.body.user_name}, I didn't quite get that. Please try again. The options are:\n ${options.join('\n')}`);
     }
 }
