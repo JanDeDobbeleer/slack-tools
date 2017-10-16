@@ -173,17 +173,30 @@ class GigyaClient(object):
         response = self._call_gigya(method, params)
         return response
 
-    def get_profile_from_email(self, email):
-        """
-        Get a UID for an email address
-        """
-
+    def do_gigya_query(self, query, open_cursor=False):
+        """Do a query on Gigya with the provided SQL syntax, optionally open a cursor."""
         params = {
-            'query': "select * FROM accounts where profile.email=\"{}\"".format(email)
+            'query': query,
+            'openCursor': open_cursor
         }
         method = 'accounts.search'
         response = self._call_gigya(method, params)
         return response
+
+    def get_next_resultset(self, cursor):
+        """
+            Get the next resultset from a query in Gigya using
+            the nextCursorId from the previous resultset
+        """
+        params = {
+            'cursorId': cursor
+        }
+        method = 'accounts.search'
+        response = self._call_gigya(method, params)
+        return response
+
+    def make_free(self, uid):
+        self._call_gigya(GigyaApiEndpoint.ACCOUNTS_SET_ACCOUNT_INFO, {'uid': uid, 'data': "{'authorization': null}"})
 
     def get_available_channels(self, enabled):
         return {

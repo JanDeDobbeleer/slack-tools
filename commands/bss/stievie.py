@@ -5,7 +5,7 @@ import requests
 from .gigya import GigyaClient
 
 def do_soap_call(payload):
-    querystring = {"wsdl":""}   
+    querystring = {"wsdl":""}
     headers = {
         'content-type': "text/xml",
         'authorization': "Basic {}".format(os.environ.get('BSS_AUTH_HEADER')),
@@ -65,5 +65,5 @@ def get_subscription(customercode):
     }
 
 def get_gigya_profile(email):
-    profile = GigyaClient().get_profile_from_email(email)
+    profile = GigyaClient().do_gigya_query("select * FROM accounts where profile.email=\"{}\"".format(email))
     return profile

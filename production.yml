@@ -2,24 +2,28 @@
 - name: Deploy to Digital Ocean
   hosts: do
   remote_user: jan
+  vars:
+    remote_install_path: /home/{{ ansible_ssh_user }}/slack-tools
+    remote_home_path: /home/{{ ansible_ssh_user }}
   tasks:
   - name: stop docker container
     command: docker-compose stop
     args:
-        chdir: /home/{{ ansible_ssh_user }}/slack-tools
+        chdir: "{{ remote_install_path }}"
   - git:
       repo: git@github.com:JanJoris/slack-tools.git
-      dest: /home/{{ ansible_ssh_user }}/slack-tools
+      dest: "{{ remote_install_path }}"
       key_file: ~/.ssh/id_rsa
       clone: no
       update: yes
   - name: copy config file
-    copy: src=/home/jan/Git/python-tools/.env dest=/home/{{ ansible_ssh_user }}/slack-tools/.env
+    copy: src=/home/jan/Git/slack-tools/.env dest={{ remote_install_path }}/.env
   - name: restart vpn
-    shell: openvpn --client --config /home/{{ ansible_ssh_user }}/client.ovpn --auth-user-pass /home/{{ ansible_ssh_user }}/client.config --daemon --resolv-retry infinite 2>/dev/null
+    shell: openvpn --client --config {{ remote_home_path }}/client.ovpn --auth-user-pass {{ remote_home_path }}/client.config --daemon --resolv-retry infinite 2>/dev/null
     become: true
+    tags:
+      - vpn
   - name: start docker container
     command: docker-compose up -d
     args:
-        chdir: /home/{{ ansible_ssh_user }}/slack-tools
-  
+      chdir: "{{ remote_install_path }}"

@@ -1,0 +1,50 @@
+[
+    {
+        "key": "gsi",
+        "script": "commands/get_profile_by_id.py",
+        "help": "Search Gigya for the given ID",
+        "type": "QUERY"
+    },
+    {
+        "key": "gse",
+        "script": "commands/get_profile_by_email.py",
+        "help": "Search Gigya for the given email",
+        "type": "QUERY"
+    },
+    {
+        "key": "gmpi",
+        "script": "commands/set_matrix_from_uid.py",
+        "help": "Turn the given UID premium",
+        "type": "QUERY"
+    },
+    {
+        "key": "gmpe",
+        "script": "commands/set_matrix_from_email.py",
+        "help": "Turn the given email premium",
+        "type": "QUERY"
+    },
+    {
+        "key": "gmfi",
+        "script": "commands/make_free.py",
+        "help": "Turn the given UID free",
+        "type": "QUERY"
+    },
+    {
+        "key": "sf",
+        "script": "commands/stievie_free.py",
+        "help": "Create a free user on staging",
+        "type": "COMMAND"
+    },
+    {
+        "key": "sp",
+        "script": "commands/stievie_premium.py",
+        "help": "Create a premium user on staging",
+        "type": "COMMAND"
+    },
+    {
+        "key": "spm",
+        "script": "commands/stievie_premium_mandate.py",
+        "help": "Create a premium user on staging with a mandate",
+        "type": "COMMAND"
+    }
+]
