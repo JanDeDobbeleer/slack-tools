@@ -3,6 +3,7 @@ services:
   api:
     image: slack-api
     build: .
+    restart: always
     env_file:
     - .env
     ports:
